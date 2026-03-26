@@ -33,6 +33,7 @@ export interface RegisterResponse{
 @Injectable({
   providedIn: 'root',
 })
+//Renamed Auth to Authservices
 export class AuthService {
   private apiUrl = 'http://localhost:8080/api/auth';
 
