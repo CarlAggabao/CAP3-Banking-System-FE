@@ -1,0 +1,47 @@
+<div class="container mt-4">
+    <h4 class="mb-4">My Accounts</h4>
+
+    @if (errorMessage) {
+        <div class="alert alert-danger">
+            {{ errorMessage }}
+        </div>
+    }
+
+    <div class="row">
+        @for (account of accounts; track account.id) {
+            <div class="col-md-4 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">{{ account.accountType }}</h6>
+                        <h5 class="card-title">{{ account.accountNumber }}</h5>
+                        <p class="card-text fs-4 fw-bold">
+                            ₱{{ account.balance | number:'1.2-2' }}
+                        </p>
+                        <span class="badge" [ngClass]="{
+                            'bg-success': account.status === 'ACTIVE',
+                            'bg-danger': account.status === 'INACTIVE'
+                        }">
+                            {{ account.status }}
+                        </span>
+                        <div class="mt-3">
+                            <a [routerLink]="['/customer/transactions']"
+                               [queryParams]="{ accountNumber: account.accountNumber }"
+                               class="btn btn-sm btn-outline-primary me-2">
+                                View Transactions
+                            </a>
+                            <a [routerLink]="['/customer/transfer']"
+                               [queryParams]="{ accountNumber: account.accountNumber }"
+                               class="btn btn-sm btn-outline-secondary">
+                                Transfer
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        } @empty {
+            <div class="text-muted">
+                No accounts found.
+            </div>
+        }
+    </div>
+</div>
