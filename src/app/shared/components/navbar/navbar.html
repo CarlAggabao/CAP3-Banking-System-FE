@@ -1,0 +1,47 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+
+        <a class="navbar-brand fw-semibold" routerLink="/dashboard">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.5" class="me-2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0 0 12 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75Z" />
+            </svg>
+            BankApp
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/dashboard" routerLinkActive="active fw-semibold">
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" routerLink="/customer/transactions" routerLinkActive="active fw-semibold">
+                        Transactions
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ms-auto align-items-center gap-2">
+                <li class="nav-item">
+                    <span class="nav-link text-white-50 small">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.5" class="me-1">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                        </svg>
+                        {{ username }}
+                    </span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" (click)="logout()" style="cursor: pointer;">
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
