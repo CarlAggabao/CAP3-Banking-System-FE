@@ -1,1 +1,120 @@
-<p>overview works!</p>
+<div>
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h5 class="fw-bold mb-0">Overview</h5>
+      <p class="text-muted small mb-0">At a glance summary of the system</p>
+    </div>
+    <button class="btn btn-outline-secondary btn-sm" (click)="loadOverview()">
+      Refresh
+    </button>
+  </div>
+
+  <!-- Error -->
+  @if (error()) {
+    <div class="alert alert-danger small">{{ error() }}</div>
+  }
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="text-muted small mt-2">Loading overview...</p>
+    </div>
+  } @else {
+    <!-- Users -->
+    <p class="text-muted small fw-semibold text-uppercase mb-2">Users</p>
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Total Users</p>
+            <h3 class="fw-bold mb-0">{{ totalUsers() }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Active Users</p>
+            <h3 class="fw-bold mb-0 text-success">{{ activeUsers() }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Inactive Users</p>
+            <h3 class="fw-bold mb-0 text-danger">{{ inactiveUsers() }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Accounts -->
+    <p class="text-muted small fw-semibold text-uppercase mb-2">Accounts</p>
+    <div class="row g-3 mb-4">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Total Accounts</p>
+            <h3 class="fw-bold mb-0">{{ totalAccounts() }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Active Accounts</p>
+            <h3 class="fw-bold mb-0 text-success">{{ activeAccounts() }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Inactive Accounts</p>
+            <h3 class="fw-bold mb-0 text-danger">{{ inactiveAccounts() }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transactions -->
+    <p class="text-muted small fw-semibold text-uppercase mb-2">Transactions</p>
+    <div class="row g-3">
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Total</p>
+            <h3 class="fw-bold mb-0">{{ totalTransactions() }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Successful</p>
+            <h3 class="fw-bold mb-0 text-success">{{ successTransactions() }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Pending</p>
+            <h3 class="fw-bold mb-0 text-warning">{{ pendingTransactions() }}</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Failed</p>
+            <h3 class="fw-bold mb-0 text-danger">{{ failedTransactions() }}</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

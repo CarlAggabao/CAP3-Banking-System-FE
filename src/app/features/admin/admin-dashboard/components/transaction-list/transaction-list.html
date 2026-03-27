@@ -1,1 +1,182 @@
-<p>transaction-list works!</p>
+<div>
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h5 class="fw-bold mb-0">Transaction List</h5>
+      <p class="text-muted small mb-0">All transactions across the system</p>
+    </div>
+    <button class="btn btn-outline-secondary btn-sm" (click)="loadTransactions()">
+      Refresh
+    </button>
+  </div>
+
+  <!-- Error -->
+  @if (error()) {
+    <div class="alert alert-danger small py-2">{{ error() }}</div>
+  }
+
+  <!-- Filters -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-5">
+          <label class="form-label small fw-semibold text-muted">Search</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search by account number or description..."
+            [value]="searchTerm()"
+            (input)="searchTerm.set($any($event.target).value)"
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label small fw-semibold text-muted">Status</label>
+          <select
+            class="form-select"
+            [value]="statusFilter()"
+            (change)="statusFilter.set($any($event.target).value)">
+            <option value="ALL">All Statuses</option>
+            <option value="SUCCESS">Success</option>
+            <option value="PENDING">Pending</option>
+            <option value="FAILED">Failed</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label small fw-semibold text-muted">Type</label>
+          <select
+            class="form-select"
+            [value]="typeFilter()"
+            (change)="typeFilter.set($any($event.target).value)">
+            <option value="ALL">All Types</option>
+            <option value="TRANSFER">Transfer</option>
+          </select>
+        </div>
+        <div class="col-md-1 d-flex align-items-end">
+          @if (hasActiveFilters()) {
+            <button class="btn btn-outline-secondary w-100" (click)="clearFilters()">
+              Clear
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="text-muted small mt-2">Loading transactions...</p>
+    </div>
+  } @else {
+
+    <!-- Summary -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Showing</p>
+            <h4 class="fw-bold mb-0">{{ filteredTransactions().length }}</h4>
+            <p class="text-muted small mb-0">of {{ transactions().length }} total</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Successful Volume</p>
+            <h4 class="fw-bold mb-0 text-success">
+              ₱{{ totalAmount() | number: '1.2-2' }}
+            </h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Pending</p>
+            <h4 class="fw-bold mb-0 text-warning">
+              {{ filteredTransactions().filter(t => t.status === 'PENDING').length }}
+            </h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body">
+            <p class="text-muted small mb-1">Failed</p>
+            <h4 class="fw-bold mb-0 text-danger">
+              {{ filteredTransactions().filter(t => t.status === 'FAILED').length }}
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-4 small text-muted fw-semibold">#</th>
+                <th class="small text-muted fw-semibold">Sender</th>
+                <th class="small text-muted fw-semibold">Receiver</th>
+                <th class="small text-muted fw-semibold">Type</th>
+                <th class="small text-muted fw-semibold">Amount</th>
+                <th class="small text-muted fw-semibold">Fee</th>
+                <th class="small text-muted fw-semibold">Status</th>
+                <th class="small text-muted fw-semibold">Description</th>
+                <th class="small text-muted fw-semibold pe-4">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (filteredTransactions().length === 0) {
+                <tr>
+                  <td colspan="9" class="text-center text-muted py-4 small">
+                    No transactions found.
+                  </td>
+                </tr>
+              }
+              @for (tx of filteredTransactions(); track tx.id) {
+                <tr>
+                  <td class="ps-4 small text-muted">{{ tx.id }}</td>
+                  <td class="small">
+                    <span class="font-monospace">{{ tx.senderAccountNumber }}</span>
+                  </td>
+                  <td class="small">
+                    <span class="font-monospace">{{ tx.receiverAccountNumber }}</span>
+                  </td>
+                  <td>
+                    <span class="badge bg-secondary">{{ tx.transactionType }}</span>
+                  </td>
+                  <td class="small fw-semibold">
+                    ₱{{ tx.amount | number: '1.2-2' }}
+                  </td>
+                  <td class="small text-muted">
+                    ₱{{ tx.transactionCost | number: '1.2-2' }}
+                  </td>
+                  <td>
+                    <span class="badge"
+                      [class.bg-success]="tx.status === 'SUCCESS'"
+                      [class.bg-warning]="tx.status === 'PENDING'"
+                      [class.bg-danger]="tx.status === 'FAILED'">
+                      {{ tx.status }}
+                    </span>
+                  </td>
+                  <td class="small text-muted">
+                    {{ tx.transactionDescription || '—' }}
+                  </td>
+                  <td class="small text-muted pe-4">
+                    {{ tx.createdAt | date: 'MMM d, y, h:mm a' }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  }
+</div>
