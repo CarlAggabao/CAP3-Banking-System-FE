@@ -23,13 +23,17 @@ export class AccountService {
     return this.http.get<Account[]>(`${this.API_URL}/user/${userId}`);
   }
 
-    activateAccount(id: number): Observable<Account> {
-        return this.http.patch<Account>(`${this.API_URL}/${id}/activate`, {});
-    }
+  getMyAccounts(): Observable<Account[]> {
+    return this.http.get<Account[]>(`${this.API_URL}/me`);
+  }
 
-    deactivateAccount(id: number): Observable<Account> {
-        return this.http.patch<Account>(`${this.API_URL}/${id}/deactivate`, {});
-    }
+  activateAccount(id: number): Observable<Account> {
+      return this.http.patch<Account>(`${this.API_URL}/${id}/activate`, {});
+  }
+
+  deactivateAccount(id: number): Observable<Account> {
+      return this.http.patch<Account>(`${this.API_URL}/${id}/deactivate`, {});
+  }
 
 
 
