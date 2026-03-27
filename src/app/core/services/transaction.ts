@@ -11,6 +11,8 @@ import { Account } from '../../shared/models/account';
   providedIn: 'root',
 })
 export class TransactionService {
+    private adminApiUrl = environment.ADMIN_API_URL + '/transactions';
+
   
   constructor(private http: HttpClient) {}
 
@@ -23,7 +25,7 @@ export class TransactionService {
   }
 
   getAllTransactions(): Observable<Transaction[]> {
-    return this.http.get<Transaction[]>(`${environment.API_URL}/admin/transactions`);
+    return this.http.get<Transaction[]>(this.adminApiUrl);
   }
 
   getBalance(accountNumber: string): Observable<Account> {
