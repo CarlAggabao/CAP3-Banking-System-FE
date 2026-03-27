@@ -1,18 +1,12 @@
 import { Injectable } from '@angular/core';
-<<<<<<< HEAD
-=======
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Account } from '../../shared/models/account';
 import { environment } from '../../../environments/environment.development';
->>>>>>> dev
 
 @Injectable({
   providedIn: 'root',
 })
-<<<<<<< HEAD
-export class Account {}
-=======
 export class AccountService {
   private API_URL = environment.API_URL + '/accounts';
   constructor(private http: HttpClient){}
@@ -44,4 +38,3 @@ export class AccountService {
 
 
 }
->>>>>>> dev
