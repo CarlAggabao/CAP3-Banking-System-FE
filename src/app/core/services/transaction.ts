@@ -16,6 +16,7 @@ export class TransactionService {
   
   constructor(private http: HttpClient) {}
 
+  //API calls to the backend
   transfer(request: TransactionRequest): Observable<Transaction> {
     return this.http.post<Transaction>(`${environment.API_URL}/customer/transfer`, request);
   }

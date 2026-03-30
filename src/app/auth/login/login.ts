@@ -38,7 +38,7 @@ export class Login {
 
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
-        const destination = this.authService.isAdmin() ? '/admin/dashboard' : '/dashboard';
+        const destination = this.authService.isAdmin() ? '/admin/dashboard' : 'customer/dashboard';
         this.router.navigate([destination]);
       },
       error: (err) => {

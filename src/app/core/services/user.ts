@@ -13,6 +13,7 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
+  //API calls to the backend
   getAllUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.apiUrl);
   }

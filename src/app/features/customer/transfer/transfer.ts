@@ -73,7 +73,7 @@ export class Transfer implements OnInit {
             next: () => {
                 this.loading.set(false);
                 this.successMessage.set('Transfer successful!');
-                setTimeout(() => this.router.navigate(['/dashboard']), 2000);
+                setTimeout(() => this.router.navigate(['customer/dashboard']), 2000);
             },
             error: (err) => {
                 this.loading.set(false);

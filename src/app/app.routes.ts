@@ -5,14 +5,16 @@ import { authGuard, adminGuard } from './guards/auth-guard';
 import { Dashboard } from './features/customer/dashboard/dashboard';
 import { Transactions } from './features/customer/transactions/transactions';
 import { Transfer } from './features/customer/transfer/transfer';
+import { Deposit } from './features/customer/deposit/deposit';
 
 export const routes: Routes = [
   { path: '',         redirectTo: 'login', pathMatch: 'full' },
   { path: 'login',    component: Login },
   { path: 'register', component: Register },
-  { path: 'dashboard', component: Dashboard },
-  { path: 'transactions', component: Transactions},
+  { path: 'customer/dashboard', component: Dashboard },
+  { path: 'customer/transactions', component: Transactions},
   { path: 'customer/transfer', component: Transfer},
+  { path: 'customer/deposit', component: Deposit},
   {
     path: 'admin/dashboard',
     loadComponent: () => import('./features/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard),
