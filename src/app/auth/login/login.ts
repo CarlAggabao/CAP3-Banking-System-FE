@@ -43,7 +43,7 @@ export class Login {
       next: () => {
         const destination = this.authService.isAdmin()
           ? '/admin/dashboard'
-          : '/dashboard';
+          : '/customer/dashboard';
         this.router.navigate([destination]);
       },
       error: (err) => {
