@@ -55,11 +55,38 @@ export class AuthService {
     return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, payload);
   }
 
-  logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    localStorage.removeItem('username');
-  }
+  // logout(): void {
+  //     this.http.post(`${this.apiUrl}/logout`, {}).subscribe({
+  //     next: () => {
+  //       localStorage.removeItem('token');
+  //       localStorage.removeItem('role');
+  //       localStorage.removeItem('username');
+  //     },
+  //     error: () => {
+  //       // Clear anyway even if the call fails
+  //       localStorage.removeItem('token');
+  //       localStorage.removeItem('role');
+  //       localStorage.removeItem('username');
+  //     }
+  //   });
+  // }
+
+  logout(): Observable<any> {
+  return this.http.post(`${this.apiUrl}/logout`, {}).pipe(
+    tap({
+      next: () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('username');
+      },
+      error: () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        localStorage.removeItem('username');
+      }
+    })
+  );
+}
 
   getToken(): string | null {
     return localStorage.getItem('token');

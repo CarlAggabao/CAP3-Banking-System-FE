@@ -17,21 +17,30 @@ export const routes: Routes = [
       { path: '', redirectTo: 'overview', pathMatch: 'full' },
       {
         path: 'overview',
-        loadComponent: () => import('./features/admin/admin-dashboard/components/overview/overview').then(m => m.Overview)
+        loadComponent: () => import('./features/admin/admin-dashboard/components/overview/overview')
+        .then(m => m.Overview)
       },
       {
         path: 'users',
-        loadComponent: () => import('./features/admin/admin-dashboard/components/user-management/user-management').then(m => m.UserManagement)
+        loadComponent: () => import('./features/admin/admin-dashboard/components/user-management/user-management')
+          .then(m => m.UserManagement)
+      },
+      {
+        path: 'accounts',
+        loadComponent: () => import('./features/admin/admin-dashboard/components/account-management/account-management')
+          .then(m => m.AccountManagement)
       },
       {
         path: 'transactions',
-        loadComponent: () => import('./features/admin/admin-dashboard/components/transaction-list/transaction-list').then(m => m.TransactionList)
+        loadComponent: () => import('./features/admin/admin-dashboard/components/transaction-list/transaction-list')
+          .then(m => m.TransactionList)
+      },
+      {
+        path: 'audit-log',
+        loadComponent: () => import('./features/admin/admin-dashboard/components/audit-log/audit-log')
+          .then(m => m.AuditLogManagement)
       }
     ]
   },
-
-  // Add your dashboard routes here later
-  // { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
-
   { path: '**', redirectTo: 'login' }
 ];

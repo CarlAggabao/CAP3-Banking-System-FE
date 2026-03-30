@@ -1,0 +1,23 @@
+.card {
+  border-radius: 12px;
+}
+
+.table th {
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.table td {
+  font-size: 0.875rem;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(13, 110, 253, 0.04);
+}
+
+.pagination .page-link {
+  border-radius: 6px;
+  margin: 0 2px;
+  border: 0.5px solid #dee2e6;
+}

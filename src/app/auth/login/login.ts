@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
@@ -9,13 +9,13 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
-  styleUrl: './login.css',
+  styleUrl: './login.css'
 })
 export class Login {
   loginForm: FormGroup;
-  errorMessage = '';
-  loading = false;
-  showPassword = false;
+  errorMessage = signal('');
+  loading = signal(false);
+  showPassword = signal(false);
 
   constructor(
     private fb: FormBuilder,
@@ -32,18 +32,23 @@ export class Login {
   get password() { return this.loginForm.get('password')!; }
 
   onSubmit(): void {
-    if (this.loginForm.invalid) { this.loginForm.markAllAsTouched(); return; }
-    this.loading = true;
-    this.errorMessage = '';
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      return;
+    }
+    this.loading.set(true);
+    this.errorMessage.set('');
 
     this.authService.login(this.loginForm.value).subscribe({
       next: () => {
-        const destination = this.authService.isAdmin() ? '/admin/dashboard' : '/dashboard';
+        const destination = this.authService.isAdmin()
+          ? '/admin/dashboard'
+          : '/dashboard';
         this.router.navigate([destination]);
       },
       error: (err) => {
-        this.loading = false;
-        this.errorMessage = err.error?.message ?? 'Invalid username or password.';
+        this.loading.set(false);
+        this.errorMessage.set(err.error?.message ?? 'Invalid credentials.');
       }
     });
   }

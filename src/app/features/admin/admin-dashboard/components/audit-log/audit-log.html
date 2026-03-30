@@ -1,0 +1,181 @@
+<div>
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h5 class="fw-bold mb-0">Audit Log</h5>
+      <p class="text-muted small mb-0">
+        Track all admin actions and authentication events
+      </p>
+    </div>
+    <button class="btn btn-outline-secondary btn-sm" (click)="loadLogs()">
+      Refresh
+    </button>
+  </div>
+
+  <!-- Error -->
+  @if (error()) {
+    <div class="alert alert-danger small py-2">{{ error() }}</div>
+  }
+
+  <!-- Filters -->
+  <div class="card border-0 shadow-sm mb-4">
+    <div class="card-body">
+      <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+          <label class="form-label small fw-semibold text-muted">Actor</label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search by username..."
+            [value]="actorSearch()"
+            (input)="actorSearch.set($any($event.target).value)"
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label small fw-semibold text-muted">Action</label>
+          <select
+            class="form-select"
+            [value]="actionFilter()"
+            (change)="actionFilter.set($any($event.target).value)">
+            @for (action of actions; track action.value) {
+              <option [value]="action.value">{{ action.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label small fw-semibold text-muted">From</label>
+          <input
+            type="date"
+            class="form-control"
+            [value]="fromDate()"
+            (change)="fromDate.set($any($event.target).value)"
+          />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label small fw-semibold text-muted">To</label>
+          <input
+            type="date"
+            class="form-control"
+            [value]="toDate()"
+            (change)="toDate.set($any($event.target).value)"
+          />
+        </div>
+        <div class="col-md-2 d-flex gap-2">
+          <button class="btn btn-primary w-100" (click)="applyFilters()">
+            Search
+          </button>
+          @if (hasActiveFilters()) {
+            <button class="btn btn-outline-secondary" (click)="clearFilters()">
+              Clear
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  @if (loading()) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="text-muted small mt-2">Loading audit logs...</p>
+    </div>
+  } @else {
+
+    <!-- Summary -->
+    <p class="text-muted small mb-3">
+      Showing <strong>{{ logs().length }}</strong> of
+      <strong>{{ totalElements() }}</strong> total logs
+    </p>
+
+    <!-- Table -->
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th class="ps-4 small text-muted fw-semibold">#</th>
+                <th class="small text-muted fw-semibold">Actor</th>
+                <th class="small text-muted fw-semibold">Action</th>
+                <th class="small text-muted fw-semibold">Target</th>
+                <th class="small text-muted fw-semibold">Details</th>
+                <th class="small text-muted fw-semibold">Status</th>
+                <th class="small text-muted fw-semibold pe-4">Date & Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              @if (logs().length === 0) {
+                <tr>
+                  <td colspan="7" class="text-center text-muted py-4 small">
+                    No audit logs found.
+                  </td>
+                </tr>
+              }
+              @for (log of logs(); track log.id) {
+                <tr>
+                  <td class="ps-4 small text-muted">{{ log.id }}</td>
+                  <td class="small fw-semibold">{{ log.actorUsername }}</td>
+                  <td>
+                    <span class="small fw-semibold" [class]="getActionClass(log.action)">
+                      {{ formatAction(log.action) }}
+                    </span>
+                  </td>
+                  <td class="small text-muted">
+                    @if (log.targetEntity) {
+                      {{ log.targetEntity }}
+                      @if (log.targetId) { #{{ log.targetId }} }
+                    } @else {
+                      —
+                    }
+                  </td>
+                  <td class="small text-muted" style="max-width: 260px;">
+                    {{ log.details || '—' }}
+                  </td>
+                  <td>
+                    <span class="badge" [class]="getStatusClass(log.status)">
+                      {{ log.status }}
+                    </span>
+                  </td>
+                  <td class="small text-muted pe-4">
+                    {{ log.createdAt | date: 'MMM d, y, h:mm a' }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    @if (totalPages() > 1) {
+      <div class="d-flex justify-content-between align-items-center">
+        <p class="text-muted small mb-0">
+          Page {{ currentPage() + 1 }} of {{ totalPages() }}
+        </p>
+        <nav>
+          <ul class="pagination pagination-sm mb-0">
+            <li class="page-item" [class.disabled]="currentPage() === 0">
+              <button class="page-link" (click)="goToPage(currentPage() - 1)">
+                Previous
+              </button>
+            </li>
+            @for (page of pages(); track page) {
+              <li class="page-item" [class.active]="page === currentPage()">
+                <button class="page-link" (click)="goToPage(page)">
+                  {{ page + 1 }}
+                </button>
+              </li>
+            }
+            <li class="page-item" [class.disabled]="currentPage() === totalPages() - 1">
+              <button class="page-link" (click)="goToPage(currentPage() + 1)">
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    }
+  }
+</div>
