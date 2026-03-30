@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
@@ -13,10 +13,10 @@ import { CommonModule } from '@angular/common';
 })
 export class Register {
   registerForm: FormGroup;
-  errorMessage = '';
-  successMessage = '';
-  loading = false;
-  showPassword = false;
+  errorMessage = signal('');
+  successMessage = signal('');
+  loading = signal(false);
+  showPassword = signal(false);
 
   constructor(
     private fb: FormBuilder,
@@ -39,20 +39,27 @@ export class Register {
   get password()   { return this.registerForm.get('password')!; }
 
   onSubmit(): void {
-    if (this.registerForm.invalid) { this.registerForm.markAllAsTouched(); return; }
-    this.loading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
+    if (this.registerForm.invalid) {
+      this.registerForm.markAllAsTouched();
+      return;
+    }
+    this.loading.set(true);
+    this.errorMessage.set('');
+    this.successMessage.set('');
 
     this.authService.register(this.registerForm.value).subscribe({
       next: (res) => {
-        this.loading = false;
-        this.successMessage = `Account created! Welcome, ${res.firstName}. Redirecting to login...`;
+        this.loading.set(false);
+        this.successMessage.set(
+          `Account created! Welcome, ${res.firstName}. Redirecting to login...`
+        );
         setTimeout(() => this.router.navigate(['/login']), 2000);
       },
       error: (err) => {
-        this.loading = false;
-        this.errorMessage = err.error?.message ?? 'Registration failed. Please try again.';
+        this.loading.set(false);
+        this.errorMessage.set(
+          err.error?.message ?? 'Registration failed. Please try again.'
+        );
       }
     });
   }
