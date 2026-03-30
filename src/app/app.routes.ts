@@ -6,6 +6,7 @@ import { Dashboard } from './features/customer/dashboard/dashboard';
 import { Transactions } from './features/customer/transactions/transactions';
 import { Transfer } from './features/customer/transfer/transfer';
 import { Deposit } from './features/customer/deposit/deposit';
+import { ApplySavings } from './features/customer/apply-savings/apply-savings';
 
 export const routes: Routes = [
   { path: '',         redirectTo: 'login', pathMatch: 'full' },
@@ -15,6 +16,7 @@ export const routes: Routes = [
   { path: 'customer/transactions', component: Transactions},
   { path: 'customer/transfer', component: Transfer},
   { path: 'customer/deposit', component: Deposit},
+  { path: 'customer/apply-savings', component: ApplySavings },
   {
     path: 'admin/dashboard',
     loadComponent: () => import('./features/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard),

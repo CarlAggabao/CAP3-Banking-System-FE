@@ -35,6 +35,10 @@ export class AccountService {
       return this.http.patch<Account>(`${this.API_URL}/${id}/deactivate`, {});
   }
 
+  applyForSavingsAccount(): Observable<Account> {
+    return this.http.post<Account>(`${this.API_URL}/apply-savings`, {});
+  }
+
 
 
 }

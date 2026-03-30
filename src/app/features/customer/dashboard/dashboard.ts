@@ -44,4 +44,8 @@ export class Dashboard implements OnInit{
     formatBalance(balance: number): string {
         return balance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }   
+    
+    hasSavingsAccount = computed(() =>
+    this.accounts().some(acc => acc.accountType === 'SAVINGS')
+    );
 }
