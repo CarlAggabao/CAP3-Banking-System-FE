@@ -90,4 +90,50 @@
             </div>
         }
     </div>
+
+    @if (!hasSavingsAccount()) {
+    <div class="card border-0 rounded-4 mt-4 overflow-hidden" style="background: linear-gradient(135deg, #0d6efd, #0a58ca);">
+        <div class="card-body p-4">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <span class="badge bg-white text-primary rounded-pill px-3 py-2 mb-3 small fw-semibold">
+                        New
+                    </span>
+                    <h4 class="text-white fw-semibold mb-2">Open a Savings Account</h4>
+                    <p class="text-white opacity-75 mb-3">
+                        Start saving smarter. Our savings account helps you grow your money with structured limits that encourage disciplined saving.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 mb-4">
+                        <div class="d-flex align-items-center gap-2 text-white opacity-75 small">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            5 transactions per month
+                        </div>
+                        <div class="d-flex align-items-center gap-2 text-white opacity-75 small">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            ₱50,000 max per transfer
+                        </div>
+                        <div class="d-flex align-items-center gap-2 text-white opacity-75 small">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                            </svg>
+                            ₱100,000 max per month
+                        </div>
+                    </div>
+                    <a routerLink="/customer/apply-savings" class="btn btn-white bg-white text-primary rounded-3 fw-semibold px-4">
+                        Open Account
+                    </a>
+                </div>
+                <div class="col-md-4 d-none d-md-flex justify-content-end">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="0.5" opacity="0.2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    }   
 </div>
