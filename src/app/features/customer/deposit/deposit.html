@@ -1,1 +1,102 @@
-<p>deposit works!</p>
+<app-navbar />
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="mb-4">
+                <a routerLink="/customer/dashboard" class="btn btn-link text-decoration-none text-muted ps-0 mb-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" class="me-1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                    </svg>
+                    Back to dashboard
+                </a>
+                <h3 class="fw-semibold mb-1">Deposit Funds</h3>
+                <p class="text-muted mb-0">Add money to your account</p>
+            </div>
+
+            <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                @if (successMessage()) {
+                    <div class="toast show align-items-center text-bg-success border-0 rounded-3">
+                        <div class="d-flex">
+                            <div class="toast-body">{{ successMessage() }}</div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                                (click)="successMessage.set('')">
+                            </button>
+                        </div>
+                    </div>
+                }
+                @if (errorMessage()) {
+                    <div class="toast show align-items-center text-bg-danger border-0 rounded-3">
+                        <div class="d-flex">
+                            <div class="toast-body">{{ errorMessage() }}</div>
+                            <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                                (click)="errorMessage.set('')">
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+
+                    @if (getSelectedAccount()) {
+                        <div class="card border-0 rounded-3 mb-4">
+                            <div class="card-body p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <p class="text-muted small mb-1 fw-bold">{{ getSelectedAccount()!.accountType }} ACCOUNT</p>
+                                        <p class="font-monospace small mb-0 fw-bold">{{ getSelectedAccount()!.accountNumber }}</p>
+                                    </div>
+                                    <div class="text-end">
+                                        <p class="text-muted small mb-1">Current balance</p>
+                                        <h6 class="fw-bold mb-0">₱{{ formatBalance(getSelectedAccount()!.balance) }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted small">Select account</label>
+                        <select class="form-select rounded-3"
+                            [ngModel]="selectedAccountId()"
+                            (ngModelChange)="selectedAccountId.set($event ? +$event : null)">
+                            <option [value]="null" disabled>Select an account</option>
+                            @for (account of accounts(); track account.id) {
+                                <option [value]="account.id"
+                                    [disabled]="account.status === 'INACTIVE'">
+                                    {{ account.accountNumber }} — {{ account.accountType }}
+                                    {{ account.status === 'INACTIVE' ? '(Inactive)' : '' }}
+                                </option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label text-muted small">Amount</label>
+                        <div class="input-group">
+                            <span class="input-group-text">₱</span>
+                            <input type="number" class="form-control rounded-end-3"
+                                placeholder="0.00" min="0.01"
+                                [(ngModel)]="amount" />
+                        </div>
+                    </div>
+
+                    <button class="btn btn-success w-100 rounded-3 py-2"
+                        (click)="onSubmit()" [disabled]="loading()">
+                        @if (loading()) {
+                            <span class="spinner-border spinner-border-sm me-2"></span>
+                            Processing...
+                        } @else {
+                            Deposit Funds
+                        }
+                    </button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
