@@ -85,7 +85,10 @@
               </svg>
             }
           </button>
-          <div class="invalid-feedback">Password is required.</div>
+          <div class="invalid-feedback">
+            @if (password.errors?.['required']) { Password is required. }
+            @if (password.errors?.['minlength']) { Minimum 8 characters. }
+          </div>
         </div>
       </div>
 

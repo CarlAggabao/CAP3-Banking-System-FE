@@ -5,6 +5,7 @@ import { UserService } from '../../../../../core/services/user';
 import { User } from '../../../../../shared/models/user';
 import { UpdateUserRequest } from '../../../../../shared/models/update-user-request';
 
+const NAME_PATTERN = /^[a-zA-ZÀ-ÿ '-]+$/;
 @Component({
   selector: 'app-user-management',
   standalone: true,
@@ -49,9 +50,20 @@ export class UserManagement implements OnInit {
     private fb: FormBuilder
   ) {
     this.editForm = this.fb.group({
-      firstName:  ['', [Validators.required, Validators.maxLength(50)]],
-      middleName: ['', [Validators.maxLength(50)]],
-      lastName:   ['', [Validators.required, Validators.maxLength(50)]]
+      firstName: ['', [
+        Validators.required,
+        Validators.maxLength(50),
+        Validators.pattern(NAME_PATTERN)
+      ]],
+      middleName: ['', [
+        Validators.maxLength(50),
+        Validators.pattern(NAME_PATTERN)
+      ]],
+      lastName: ['', [
+        Validators.required,
+        Validators.maxLength(50),
+        Validators.pattern(NAME_PATTERN)
+      ]]
     });
   }
 
@@ -103,8 +115,8 @@ export class UserManagement implements OnInit {
         this.successMessage.set('User updated successfully.');
         this.closeModal();
       },
-      error: () => {
-        this.error.set('Failed to update user.');
+      error: (err) => {
+        this.error.set(err.error?.message ?? 'Failed to update user.');
         this.actionLoading.set(false);
       }
     });
@@ -129,8 +141,8 @@ export class UserManagement implements OnInit {
           `User ${updated.status === 'ACTIVE' ? 'restored' : 'deactivated'} successfully.`
         );
       },
-      error: () => {
-        this.error.set('Failed to update user status.');
+      error: (err) => {
+        this.error.set(err.error?.message ?? 'Failed to update user status.');
         this.actionLoading.set(false);
       }
     });

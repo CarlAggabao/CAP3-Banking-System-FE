@@ -34,6 +34,7 @@ export class AuditLogManagement implements OnInit {
     { value: 'LOGIN_SUCCESS', label: 'Login Success' },
     { value: 'LOGIN_FAILED_INVALID_PASSWORD', label: 'Login Failed (Wrong Password)' },
     { value: 'LOGIN_FAILED_USER_NOT_FOUND', label: 'Login Failed (User Not Found)' },
+    { value: 'LOGIN_FAILED_INACTIVE_ACCOUNT', label: 'Login Failed (Inactive Account)' },
     { value: 'LOGOUT', label: 'Logout' },
     { value: 'USER_UPDATED', label: 'User Updated' },
     { value: 'USER_DEACTIVATED', label: 'User Deactivated' },
