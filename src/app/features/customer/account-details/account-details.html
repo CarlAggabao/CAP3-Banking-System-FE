@@ -1,0 +1,169 @@
+<app-navbar />
+
+<div class="container py-5">
+
+    @if (errorMessage()) {
+        <div class="alert alert-danger rounded-3">
+            {{ errorMessage() }}
+        </div>
+    }
+
+    @if (account()) {
+        <div class="mb-4">
+            <a routerLink="/customer/dashboard" class="btn btn-link text-decoration-none text-muted ps-0 mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" class="me-1">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+                </svg>
+                Back to dashboard
+            </a>
+            <h3 class="fw-semibold mb-1">Account Details</h3>
+            <p class="text-muted mb-0">{{ account()!.accountType }} Account — {{ account()!.accountNumber }}</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="p-2" [ngClass]="{
+                        'bg-primary': account()!.accountType === 'CHECKING',
+                        'bg-success': account()!.accountType === 'SAVINGS'
+                    }"></div>
+                    <div class="card-body p-4">
+
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            @if (account()!.accountType === 'CHECKING') {
+                                <div class="bg-primary bg-opacity-10 rounded-3 p-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#0d6efd" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
+                                    </svg>
+                                </div>
+                            } @else {
+                                <div class="bg-success bg-opacity-10 rounded-3 p-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="#198754" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                                    </svg>
+                                </div>
+                            }
+                            <span class="badge rounded-pill px-3 py-2" [ngClass]="{
+                                'text-bg-success': account()!.status === 'ACTIVE',
+                                'text-bg-danger': account()!.status === 'INACTIVE'
+                            }">
+                                {{ account()!.status }}
+                            </span>
+                        </div>
+
+                        <p class="text-muted small mb-1">{{ account()!.accountType }} ACCOUNT</p>
+                        <p class="text-muted small mb-3 font-monospace">{{ account()!.accountNumber }}</p>
+                        <h4 class="fw-bold mb-1">₱{{ formatBalance(account()!.balance) }}</h4>
+                        <p class="text-muted small mb-4">Available balance</p>
+
+                        <hr class="opacity-25">
+
+                        <p class="text-muted small mb-1">Account opened</p>
+                        <p class="small mb-0">{{ account()!.createdAt | date: 'MMMM d, y' }}</p>
+
+                        <div class="d-flex gap-2 mt-4">
+                            <a [routerLink]="['/customer/deposit']"
+                               [queryParams]="{ accountId: account()!.id }"
+                               class="btn btn-outline-success btn-sm flex-fill rounded-3">
+                                Deposit
+                            </a>
+                            <a routerLink="/customer/transfer"
+                               class="btn btn-primary btn-sm flex-fill rounded-3">
+                                Transfer
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-8">
+                <div class="card border-0 shadow-sm rounded-4">
+                    <div class="card-body p-4">
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="fw-semibold mb-0">Recent Transactions</h5>
+                            <a routerLink="/customer/transactions"
+                               [queryParams]="{ accountNumber: account()!.accountNumber }"
+                               class="btn btn-link btn-sm text-decoration-none">
+                                View all
+                            </a>
+                        </div>
+
+                        @if (transactions().length === 0) {
+                            <div class="text-center py-5 text-muted">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1" class="mb-3 opacity-50">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
+                                </svg>
+                                <p class="mb-0 small">No transactions yet.</p>
+                            </div>
+                        } @else {
+                            <div class="list-group list-group-flush">
+                                @for (transaction of transactions(); track transaction.id) {
+                                    <div class="list-group-item px-0 py-3">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex align-items-center gap-3">
+                                                <div class="rounded-circle d-flex align-items-center justify-content-center"
+                                                    style="width: 40px; height: 40px; min-width: 40px;"
+                                                    [ngClass]="{
+                                                        'bg-danger bg-opacity-10': isSent(transaction),
+                                                        'bg-success bg-opacity-10': !isSent(transaction)
+                                                    }">
+                                                    @if (isSent(transaction)) {
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#dc3545" stroke-width="1.5">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" />
+                                                        </svg>
+                                                    } @else {
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="#198754" stroke-width="1.5">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5 12 21m0 0-7.5-7.5M12 21V3" />
+                                                        </svg>
+                                                    }
+                                                </div>
+                                                <div>
+                                                    <p class="mb-0 fw-semibold small">
+                                                        @if (transaction.transactionType === 'DEPOSIT') {
+                                                            Deposit
+                                                        } @else {
+                                                            {{ isSent(transaction) ? 'Sent to ' + transaction.receiverAccountNumber : 'Received from ' + transaction.senderAccountNumber }}
+                                                        }
+                                                    </p>
+                                                    @if (transaction.transactionDescription && transaction.transactionType !== 'DEPOSIT') {
+                                                        <p class="mb-0 text-muted" style="font-size: 12px;">
+                                                            {{ transaction.transactionDescription }}
+                                                        </p>
+                                                    }
+                                                    <p class="mb-0 text-muted" style="font-size: 11px;">
+                                                        {{ transaction.createdAt | date: 'MMM d, y, h:mm a' }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="text-end">
+                                                <p class="mb-1 fw-semibold small" [ngClass]="{
+                                                    'text-danger': isSent(transaction),
+                                                    'text-success': !isSent(transaction)
+                                                }">
+                                                    {{ isSent(transaction) ? '-' : '+' }}₱{{ formatBalance(transaction.amount) }}
+                                                </p>
+                                                <span class="badge rounded-pill" style="font-size: 10px;" [ngClass]="{
+                                                    'text-bg-success': transaction.status === 'SUCCESS',
+                                                    'text-bg-danger': transaction.status === 'FAILED',
+                                                    'text-bg-warning': transaction.status === 'PENDING'
+                                                }">
+                                                    {{ transaction.status }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

@@ -71,9 +71,11 @@ export class Transfer implements OnInit {
             transactionDescription: this.description
         }).subscribe({
             next: () => {
-                this.loading.set(false);
                 this.successMessage.set('Transfer successful!');
-                setTimeout(() => this.router.navigate(['customer/dashboard']), 2000);
+                setTimeout(() => {
+                    this.loading.set(false);
+                    this.router.navigate(['customer/dashboard']);
+                }, 2000);
             },
             error: (err) => {
                 this.loading.set(false);
