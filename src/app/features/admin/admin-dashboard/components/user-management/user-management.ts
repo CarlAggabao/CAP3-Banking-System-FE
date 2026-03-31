@@ -1,9 +1,11 @@
-import { Component, OnInit, signal, computed } from '@angular/core';
+import { Component, OnInit, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../../../../../core/services/user';
 import { User } from '../../../../../shared/models/user';
 import { UpdateUserRequest } from '../../../../../shared/models/update-user-request';
+
 
 const NAME_PATTERN = /^[a-zA-ZÀ-ÿ '-]+$/;
 @Component({
@@ -97,6 +99,18 @@ export class UserManagement implements OnInit {
     });
   }
 
+  private platformId = inject(PLATFORM_ID);
+
+  closeBootstrapModal(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const modalEl = document.getElementById('editUserModal');
+      if (modalEl) {
+        const modal = (window as any).bootstrap.Modal.getInstance(modalEl);
+        if (modal) modal.hide();
+      }
+    }
+  }
+
   saveEdit(): void {
     if (this.editForm.invalid || !this.selectedUser()) {
       this.editForm.markAllAsTouched();
@@ -113,6 +127,7 @@ export class UserManagement implements OnInit {
         );
         this.actionLoading.set(false);
         this.successMessage.set('User updated successfully.');
+        this.closeBootstrapModal();
         this.closeModal();
       },
       error: (err) => {
