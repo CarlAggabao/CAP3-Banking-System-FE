@@ -69,6 +69,11 @@
                         <hr class="text-muted opacity-25">
 
                         <div class="d-flex gap-2 mt-3">
+                            <a [routerLink]="['/customer/deposit']"
+                            [queryParams]="{ accountId: account.id }"
+                            class="btn btn-outline-success btn-sm flex-fill rounded-3">
+                                Deposit
+                            </a>
                             <a [routerLink]="['/customer/transactions']"
                                [queryParams]="{ accountNumber: account.accountNumber }"
                                class="btn btn-outline-primary btn-sm flex-fill rounded-3">

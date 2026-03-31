@@ -39,6 +39,9 @@ export class AccountService {
     return this.http.post<Account>(`${this.API_URL}/apply-savings`, {});
   }
 
+  depositBalance(id: number, amount: number): Observable<Account> {
+      return this.http.patch<Account>(`${this.API_URL}/${id}/deposit`, { amount });
+  }
 
 
 }
