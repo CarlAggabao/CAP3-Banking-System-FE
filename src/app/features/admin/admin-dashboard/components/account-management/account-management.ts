@@ -88,8 +88,8 @@ export class AccountManagement implements OnInit {
           `Account ${updated.accountNumber} ${updated.status === 'ACTIVE' ? 'activated' : 'deactivated'} successfully.`
         );
       },
-      error: () => {
-        this.error.set('Failed to update account status.');
+      error: (err) => {
+        this.error.set(err.error?.message ?? 'Failed to update account status.');
         this.actionLoading.set(false);
       }
     });

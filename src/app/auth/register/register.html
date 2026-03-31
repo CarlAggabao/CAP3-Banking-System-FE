@@ -61,8 +61,13 @@
               placeholder="Juan"
             />
             <div class="invalid-feedback">
-              @if (firstName.errors?.['required']) { Required. }
-              @if (firstName.errors?.['maxlength']) { Max 50 characters. }
+              @if (firstName.errors?.['required']) {
+                First name is required.
+              } @else if (firstName.errors?.['maxlength']) {
+                Max 50 characters.
+              } @else if (firstName.errors?.['pattern']) {
+                Only letters, spaces, hyphens, and apostrophes allowed.
+              }
             </div>
           </div>
           <div class="col-5">
@@ -73,9 +78,17 @@
               id="middleName"
               type="text"
               class="form-control"
+              [class.is-invalid]="middleName.invalid && middleName.touched"
               formControlName="middleName"
               placeholder="Optional"
             />
+            <div class="invalid-feedback">
+              @if (middleName.errors?.['maxlength']) {
+                Max 50 characters.
+              } @else if (middleName.errors?.['pattern']) {
+                Only letters, spaces, hyphens, and apostrophes allowed.
+              }
+            </div>
           </div>
         </div>
 
@@ -93,8 +106,13 @@
             placeholder="Dela Cruz"
           />
           <div class="invalid-feedback">
-            @if (lastName.errors?.['required']) { Required. }
-            @if (lastName.errors?.['maxlength']) { Max 50 characters. }
+            @if (lastName.errors?.['required']) {
+              Last name is required.
+            } @else if (lastName.errors?.['maxlength']) {
+              Max 50 characters.
+            } @else if (lastName.errors?.['pattern']) {
+              Only letters, spaces, hyphens, and apostrophes allowed.
+            }
           </div>
         </div>
 
@@ -113,9 +131,15 @@
             autocomplete="username"
           />
           <div class="invalid-feedback">
-            @if (username.errors?.['required']) { Username is required. }
-            @if (username.errors?.['minlength']) { Minimum 4 characters. }
-            @if (username.errors?.['maxlength']) { Maximum 30 characters. }
+            @if (username.errors?.['required']) {
+              Username is required.
+            } @else if (username.errors?.['minlength']) {
+              Minimum 4 characters.
+            } @else if (username.errors?.['maxlength']) {
+              Maximum 30 characters.
+            } @else if (username.errors?.['pattern']) {
+              Only letters, numbers, and underscores allowed.
+            }
           </div>
         </div>
 
@@ -131,7 +155,7 @@
               class="form-control border-end-0"
               [class.is-invalid]="password.invalid && password.touched"
               formControlName="password"
-              placeholder="Min. 6 characters"
+              placeholder="Min. 8 characters"
               autocomplete="new-password"
             />
             <button
@@ -156,9 +180,18 @@
               }
             </button>
             <div class="invalid-feedback">
-              @if (password.errors?.['required']) { Password is required. }
-              @if (password.errors?.['minlength']) { Minimum 6 characters. }
+              @if (password.errors?.['required']) {
+                Password is required.
+              } @else if (password.errors?.['minlength']) {
+                Minimum 8 characters.
+              } @else if (password.errors?.['pattern']) {
+                Must contain at least 1 uppercase letter, 1 number, and 1 special character.
+              }
             </div>
+          </div>
+          <!-- Password hint -->
+          <div class="form-text text-muted" style="font-size: 0.75rem;">
+            Min. 8 characters with at least 1 uppercase, 1 number, and 1 special character.
           </div>
         </div>
 

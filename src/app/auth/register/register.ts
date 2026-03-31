@@ -4,6 +4,9 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 import { CommonModule } from '@angular/common';
 
+const NAME_PATTERN = /^[a-zA-ZÀ-ÿ '-]+$/;
+const USERNAME_PATTERN = /^[a-zA-Z0-9_]+$/;
+const PASSWORD_PATTERN = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).{8,}$/;
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -24,11 +27,31 @@ export class Register {
     private router: Router
   ) {
     this.registerForm = this.fb.group({
-      firstName:  ['', [Validators.required, Validators.maxLength(50)]],
-      middleName: ['', [Validators.maxLength(50)]],
-      lastName:   ['', [Validators.required, Validators.maxLength(50)]],
-      username:   ['', [Validators.required, Validators.minLength(4), Validators.maxLength(30)]],
-      password:   ['', [Validators.required, Validators.minLength(6)]]
+      firstName: ['', [
+        Validators.required,
+        Validators.maxLength(50),
+        Validators.pattern(NAME_PATTERN)
+      ]],
+      middleName: ['', [
+        Validators.maxLength(50),
+        Validators.pattern(NAME_PATTERN)
+      ]],
+      lastName: ['', [
+        Validators.required,
+        Validators.maxLength(50),
+        Validators.pattern(NAME_PATTERN)
+      ]],
+      username: ['', [
+        Validators.required,
+        Validators.minLength(4),
+        Validators.maxLength(30),
+        Validators.pattern(USERNAME_PATTERN)
+      ]],
+      password: ['', [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(PASSWORD_PATTERN)
+      ]]
     });
   }
 

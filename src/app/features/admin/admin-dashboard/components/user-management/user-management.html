@@ -69,7 +69,9 @@
             <tbody>
               @if (filteredUsers().length === 0) {
                 <tr>
-                  <td colspan="6" class="text-center text-muted py-4 small">No users found.</td>
+                  <td colspan="6" class="text-center text-muted py-4 small">
+                    No users found.
+                  </td>
                 </tr>
               }
               @for (user of filteredUsers(); track user.id) {
@@ -94,9 +96,12 @@
                       {{ user.status }}
                     </span>
                   </td>
-                  <td class="small text-muted">{{ user.createdAt | date: 'MMM d, y' }}</td>
+                  <td class="small text-muted">
+                    {{ user.createdAt | date: 'MMM d, y' }}
+                  </td>
                   <td class="text-end pe-4">
                     <div class="d-flex justify-content-end gap-2">
+                      <!-- Edit button — always visible -->
                       <button
                         class="btn btn-outline-primary btn-sm"
                         (click)="openEditModal(user)"
@@ -104,14 +109,17 @@
                         data-bs-target="#editUserModal">
                         Edit
                       </button>
-                      <button
-                        class="btn btn-sm"
-                        [class.btn-outline-danger]="user.status === 'ACTIVE'"
-                        [class.btn-outline-success]="user.status === 'INACTIVE'"
-                        [disabled]="actionLoading()"
-                        (click)="toggleUserStatus(user)">
-                        {{ user.status === 'ACTIVE' ? 'Deactivate' : 'Restore' }}
-                      </button>
+                      <!-- Deactivate/Restore — hidden for admins -->
+                      @if (user.role !== 'ADMIN') {
+                        <button
+                          class="btn btn-sm"
+                          [class.btn-outline-danger]="user.status === 'ACTIVE'"
+                          [class.btn-outline-success]="user.status === 'INACTIVE'"
+                          [disabled]="actionLoading()"
+                          (click)="toggleUserStatus(user)">
+                          {{ user.status === 'ACTIVE' ? 'Deactivate' : 'Restore' }}
+                        </button>
+                      }
                     </div>
                   </td>
                 </tr>
@@ -130,7 +138,9 @@
     <div class="modal-content border-0 shadow">
       <div class="modal-header border-0 pb-0">
         <h6 class="modal-title fw-bold">Edit User</h6>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" (click)="closeModal()"></button>
+        <button type="button" class="btn-close"
+          data-bs-dismiss="modal" (click)="closeModal()">
+        </button>
       </div>
       <div class="modal-body">
         @if (selectedUser()) {
@@ -143,42 +153,78 @@
                 <label class="form-label fw-semibold small">
                   First Name <span class="text-danger">*</span>
                 </label>
-                <input type="text" class="form-control"
+                <input
+                  type="text"
+                  class="form-control"
                   formControlName="firstName"
-                  [class.is-invalid]="firstName.invalid && firstName.touched"/>
+                  [class.is-invalid]="firstName.invalid && firstName.touched"
+                />
                 <div class="invalid-feedback">
-                  @if (firstName.errors?.['required']) { Required. }
+                  @if (firstName.errors?.['required']) {
+                    First name is required.
+                  } @else if (firstName.errors?.['maxlength']) {
+                    Max 50 characters.
+                  } @else if (firstName.errors?.['pattern']) {
+                    Only letters, spaces, hyphens, and apostrophes allowed.
+                  }
                 </div>
               </div>
               <div class="col-5">
                 <label class="form-label fw-semibold small">Middle Name</label>
-                <input type="text" class="form-control" formControlName="middleName"/>
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="middleName"
+                  [class.is-invalid]="middleName.invalid && middleName.touched"
+                />
+                <div class="invalid-feedback">
+                  @if (middleName.errors?.['maxlength']) {
+                    Max 50 characters.
+                  } @else if (middleName.errors?.['pattern']) {
+                    Only letters, spaces, hyphens, and apostrophes allowed.
+                  }
+                </div>
               </div>
             </div>
             <div class="mb-3">
               <label class="form-label fw-semibold small">
                 Last Name <span class="text-danger">*</span>
               </label>
-              <input type="text" class="form-control"
+              <input
+                type="text"
+                class="form-control"
                 formControlName="lastName"
-                [class.is-invalid]="lastName.invalid && lastName.touched"/>
+                [class.is-invalid]="lastName.invalid && lastName.touched"
+              />
               <div class="invalid-feedback">
-                @if (lastName.errors?.['required']) { Required. }
+                @if (lastName.errors?.['required']) {
+                  Last name is required.
+                } @else if (lastName.errors?.['maxlength']) {
+                  Max 50 characters.
+                } @else if (lastName.errors?.['pattern']) {
+                  Only letters, spaces, hyphens, and apostrophes allowed.
+                }
               </div>
             </div>
           </form>
         }
       </div>
       <div class="modal-footer border-0 pt-0">
-        <button type="button" class="btn btn-outline-secondary btn-sm"
-          data-bs-dismiss="modal" (click)="closeModal()">
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-sm"
+          data-bs-dismiss="modal"
+          (click)="closeModal()">
           Cancel
         </button>
-        <button type="button" class="btn btn-primary btn-sm"
+        <button
+          type="button"
+          class="btn btn-primary btn-sm"
           [disabled]="actionLoading()"
           (click)="saveEdit()">
           @if (actionLoading()) {
-            <span class="spinner-border spinner-border-sm me-1"></span>Saving...
+            <span class="spinner-border spinner-border-sm me-1"></span>
+            Saving...
           } @else {
             Save Changes
           }
